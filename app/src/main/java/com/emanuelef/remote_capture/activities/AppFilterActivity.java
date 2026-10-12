@@ -74,6 +74,7 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
     @Override
     public void onCreateMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.hint_menu, menu);
+        inflater.inflate(R.menu.target_apps_bulk_menu, menu);
     }
 
     @Override
@@ -82,6 +83,16 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
 
         if (id == R.id.show_hint) {
             Utils.showHelpDialog(this, R.string.target_apps_help);
+            return true;
+        }
+        if (id == R.id.bulk_select_system) {
+            if (mFragment != null)
+                mFragment.selectAppsOfType(true);
+            return true;
+        }
+        if (id == R.id.bulk_select_third_party) {
+            if (mFragment != null)
+                mFragment.selectAppsOfType(false);
             return true;
         }
 
@@ -93,6 +104,7 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
         private @Nullable SharedPreferences mPrefs;
         private View mSelectSystemButton;
         private View mSelectThirdPartyButton;
+        private boolean mAppsLoaded;
 
         @Override
         protected int getLayoutResId() {
@@ -104,25 +116,28 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
             super.onViewCreated(view, savedInstanceState);
             mSelectSystemButton = view.findViewById(R.id.select_system_apps);
             mSelectThirdPartyButton = view.findViewById(R.id.select_third_party_apps);
-            mSelectSystemButton.setOnClickListener(v -> checkAppsByType(true));
-            mSelectThirdPartyButton.setOnClickListener(v -> checkAppsByType(false));
+            mSelectSystemButton.setOnClickListener(v -> selectAppsOfType(true));
+            mSelectThirdPartyButton.setOnClickListener(v -> selectAppsOfType(false));
         }
 
         @Override
         public void onAppsInfoLoaded(List<AppDescriptor> apps) {
             super.onAppsInfoLoaded(apps);
-            mSelectSystemButton.setEnabled(!apps.isEmpty());
-            mSelectThirdPartyButton.setEnabled(!apps.isEmpty());
+            mAppsLoaded = true;
         }
 
         @Override
         public void onDestroyView() {
             mSelectSystemButton = null;
             mSelectThirdPartyButton = null;
+            mAppsLoaded = false;
             super.onDestroyView();
         }
 
-        private void checkAppsByType(boolean systemApps) {
+        public void selectAppsOfType(boolean systemApps) {
+            if (!mAppsLoaded)
+                return;
+
             Set<String> addedPackages = selectAppsByType(systemApps);
             if (addedPackages.isEmpty())
                 return;
