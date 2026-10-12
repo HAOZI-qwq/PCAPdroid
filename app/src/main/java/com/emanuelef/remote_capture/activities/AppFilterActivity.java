@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.emanuelef.remote_capture.fragments.AppsToggles;
 import com.emanuelef.remote_capture.model.AppDescriptor;
 import com.emanuelef.remote_capture.model.Prefs;
 
+import java.util.List;
 import java.util.Set;
 
 public class AppFilterActivity extends BaseActivity implements MenuProvider {
@@ -89,6 +91,55 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
     public static class AppFilterFragment extends AppsToggles {
         private final Set<String> mSelectedApps = new ArraySet<>();
         private @Nullable SharedPreferences mPrefs;
+        private View mSelectSystemButton;
+        private View mSelectThirdPartyButton;
+
+        @Override
+        protected int getLayoutResId() {
+            return R.layout.target_apps_selection;
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            mSelectSystemButton = view.findViewById(R.id.select_system_apps);
+            mSelectThirdPartyButton = view.findViewById(R.id.select_third_party_apps);
+            mSelectSystemButton.setOnClickListener(v -> checkAppsByType(true));
+            mSelectThirdPartyButton.setOnClickListener(v -> checkAppsByType(false));
+        }
+
+        @Override
+        public void onAppsInfoLoaded(List<AppDescriptor> apps) {
+            super.onAppsInfoLoaded(apps);
+            mSelectSystemButton.setEnabled(!apps.isEmpty());
+            mSelectThirdPartyButton.setEnabled(!apps.isEmpty());
+        }
+
+        @Override
+        public void onDestroyView() {
+            mSelectSystemButton = null;
+            mSelectThirdPartyButton = null;
+            super.onDestroyView();
+        }
+
+        private void checkAppsByType(boolean systemApps) {
+            Set<String> addedPackages = selectAppsByType(systemApps);
+            if (addedPackages.isEmpty())
+                return;
+
+            mSelectedApps.addAll(addedPackages);
+            saveSelection();
+        }
+
+        private void saveSelection() {
+            Log.d(TAG, "Saving " + mSelectedApps.size() + " target apps");
+            if (mPrefs != null) {
+                // SharedPreferences requires the supplied set to remain immutable.
+                mPrefs.edit()
+                        .putStringSet(Prefs.PREF_APP_FILTER, new ArraySet<>(mSelectedApps))
+                        .apply();
+            }
+        }
 
         @Override
         public void onAttach(@NonNull Context context) {
@@ -127,14 +178,7 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
             else
                 mSelectedApps.remove(packageName);
 
-            Log.d(TAG, "Saving " + mSelectedApps.size() + " target apps");
-
-            if(mPrefs == null)
-                return;
-
-            mPrefs.edit()
-                    .putStringSet(Prefs.PREF_APP_FILTER, mSelectedApps)
-                    .apply();
+            saveSelection();
         }
     }
 }
