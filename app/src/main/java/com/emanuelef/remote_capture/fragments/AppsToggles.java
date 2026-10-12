@@ -66,7 +66,16 @@ public abstract class AppsToggles extends Fragment implements AppsLoadListener,
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         requireActivity().addMenuProvider(this, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-        return inflater.inflate(R.layout.apps_stats, container, false);
+        return inflater.inflate(getLayoutResId(), container, false);
+    }
+
+    protected int getLayoutResId() {
+        return R.layout.apps_stats;
+    }
+
+    // Select from the full installed-app list, regardless of the current search or visibility filter.
+    protected Set<String> selectAppsByType(boolean systemApps) {
+        return mAdapter.selectAppsByType(systemApps);
     }
 
     @Override
