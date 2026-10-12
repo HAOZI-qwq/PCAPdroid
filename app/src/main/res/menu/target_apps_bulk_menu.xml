@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Backup entry points in the overflow menu for different screen sizes. -->
+    <item
+        android:id="@+id/bulk_select_system"
+        android:title="@string/select_system_apps"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/bulk_select_third_party"
+        android:title="@string/select_third_party_apps"
+        app:showAsAction="never" />
+</menu>
