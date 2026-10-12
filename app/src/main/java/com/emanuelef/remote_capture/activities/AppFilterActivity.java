@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -34,7 +35,7 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.target_apps);
+        setTitle(R.string.target_apps_bulk_title);
         setContentView(R.layout.fragment_activity);
         addMenuProvider(this);
         displayBackAction();
@@ -135,15 +136,19 @@ public class AppFilterActivity extends BaseActivity implements MenuProvider {
         }
 
         public void selectAppsOfType(boolean systemApps) {
-            if (!mAppsLoaded)
+            if (!mAppsLoaded) {
+                Toast.makeText(requireContext(), R.string.loading_apps, Toast.LENGTH_SHORT).show();
                 return;
+            }
 
             Set<String> addedPackages = selectAppsByType(systemApps);
-            if (addedPackages.isEmpty())
-                return;
-
-            mSelectedApps.addAll(addedPackages);
-            saveSelection();
+            if (!addedPackages.isEmpty()) {
+                mSelectedApps.addAll(addedPackages);
+                saveSelection();
+            }
+            Toast.makeText(requireContext(),
+                    getString(R.string.batch_selected_count, addedPackages.size()),
+                    Toast.LENGTH_SHORT).show();
         }
 
         private void saveSelection() {

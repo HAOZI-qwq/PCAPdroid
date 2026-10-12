@@ -163,6 +163,8 @@
     <string name="select">Select</string>
     <string name="n_selected">%1$d selected</string>
     <string name="bulk_select_apps">Batch select apps</string>
+    <string name="target_apps_bulk_title">Target apps · BULK V2</string>
+    <string name="batch_selected_count">Newly selected apps: %1$d</string>
     <string name="select_system_apps">Select system apps</string>
     <string name="select_third_party_apps">Select third-party apps</string>
     <string name="select_all">Select all</string>
