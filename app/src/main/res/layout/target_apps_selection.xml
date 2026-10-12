@@ -1,37 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- Keep the bulk actions visually prominent, even in dark mode. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="4dp">
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
-        <Button
-            android:id="@+id/select_system_apps"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/select_system_apps"
-            android:textAllCaps="false"
-            android:maxLines="2"
-            android:enabled="false" />
+            android:paddingBottom="6dp"
+            android:text="@string/bulk_select_apps"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary" />
 
-        <Button
-            android:id="@+id/select_third_party_apps"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="@string/select_third_party_apps"
-            android:textAllCaps="false"
-            android:maxLines="2"
-            android:enabled="false" />
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/select_system_apps"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/select_system_apps"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/select_third_party_apps"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/select_third_party_apps"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <include
