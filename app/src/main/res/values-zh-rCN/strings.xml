@@ -93,6 +93,7 @@
     <string name="protocol_val">协议: %1$s</string>
     <string name="hide">隐藏…</string>
     <string name="n_selected">选中了 %1$d </string>
+    <string name="bulk_select_apps">批量选择应用</string>
     <string name="select_system_apps">一键勾选系统应用</string>
     <string name="select_third_party_apps">一键勾选第三方应用</string>
     <string name="select_all">选择全部</string>
