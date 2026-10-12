@@ -247,6 +247,20 @@ public class AppsTogglesAdapter extends RecyclerView.Adapter<AppsTogglesAdapter.
         refreshedFiteredApps();
     }
 
+    // Add all system or third-party apps without clearing any existing selection.
+    // Includes background system apps even if "Show system apps" is disabled.
+    public Set<String> selectAppsByType(boolean systemApps) {
+        Set<String> addedPackages = new ArraySet<>();
+        for (AppDescriptor app : mApps) {
+            if (app.isSystem() == systemApps && mCheckedItems.add(app.getPackageName()))
+                addedPackages.add(app.getPackageName());
+        }
+
+        if (!addedPackages.isEmpty())
+            refreshedFiteredApps();
+        return addedPackages;
+    }
+
     public void setFilter(String text) {
         mFilter = text;
         refreshedFiteredApps();
